@@ -43,6 +43,16 @@ est.mean = mean(survey)
 est.var = 1000/(1000-1) * var(survey)
 
 ```
+# multiple surveys
+
+```{r}
+est.meanlist <- c()
+for (i in 1:1000){
+  survey = sample(population, size = 1000)
+  est.meanlist <- c(est.meanlist, mean(survey))
+}
+mean(est.meanlist)
+```
 
 # Normally-approximated confidence intervals
 
@@ -129,7 +139,8 @@ Bootstrap is slower, but needs no Central Limit Theorem.
 NOTE: sample *with* replacement is the key
 
 ```{r}
-print (length(sample))
+survey <- sample(population, 5000)
+print (length(survey))
 bootstrap_means = c() # store bootstrapped means
 for (i in 1:1000){
   # resample from the sample with replacement
