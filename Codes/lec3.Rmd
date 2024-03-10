@@ -93,18 +93,13 @@ l = glm(health ~ wage + education + race, data = Wage, family=binomial("logit"))
 summary(l)
 ```
 
-
-
-
-
-
-
 ## interpretation 3 (marginal effect)
 
 ```{r}
 AME <- margins(l)
 AME
 
+## cannot set up in this way
 MEM <- margins(l, at = list(wage = mean(Wage$education), race = mean(Wage$race)))
 MEM
 
@@ -127,7 +122,6 @@ cplot(l, "wage", what = "prediction", main = "Predicted probability")
 ```{r}
 ## by default, holding all other to be the constant and vary by focal variable
 cplot(l, "race", what = "prediction", main = "Predicted probability")
-
 ```
 
 
@@ -198,14 +192,15 @@ Gender: male or female
 
 
 ```{r}
+library(MASS)
 library(carData)
 data (WVS)
 head(WVS)
-
 ```
 
 
 ```{r}
+# from the MASS package
 ordered_logit <- polr(poverty~religion+degree+country+age+gender, data = WVS, Hess = TRUE)
 summary(ordered_logit)
 ```
@@ -224,11 +219,34 @@ The data set contains variables on 200 students.
 - The outcome variable is prog, program type (general, vocation and academic)
 - The predictor variables are social economic status, ses, a three-level categorical variable and writing score, write, a continuous variable. 
 ```{r}
-ml <- read.dta("https://stats.idre.ucla.edu/stat/data/hsbdemo.dta")
+# ml <- read.dta("https://stats.idre.ucla.edu/stat/data/hsbdemo.dta")
+ml <- read.csv("hsbdemo.csv")
+
+
+# character (unordered categorical)
+# factor (ordered categorical) ## use levels() to get the orders of factor variable
+# numeric 
 ```
 
-We run multinomial regression. The first category is used as the reference group, here general
+academic  general vocation 
+     105       45       50
+     
+     
+    
+```{r}
 
+x = read.csv("XXX.csv")
+x = c("2", "3", "10")
+xf <- factor(x)
+xc = as.numeric(x)
+
+# run as.numeric on a factor; the orders will be returned
+xy = as.numeric(xf) # what this will be? 1,2, 3
+
+##
+as.numeric(as.character(xf))
+
+```
 
 ```{r}
 library(nnet)
