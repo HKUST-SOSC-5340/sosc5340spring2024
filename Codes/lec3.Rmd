@@ -426,9 +426,11 @@ library(texreg)
 
 # boostrapp
 ```{r}
+library(readr)
+library(dplyr)
 set.seed(12345)
 
-anes <- read_delim("anes_timeseries_2016_rawdata.txt", delim = "|") %>%
+anes <- read_delim("/Users/han/Dropbox/Materials/HKUST/Teaching/SOSC5340/sosc5340spring2022/Codes/anes_timeseries_2016_rawdata.txt", delim = "|") %>%
   select(vote = V162034a, V161270, gender = V161342, age = V161267) %>%
   mutate_all(as.numeric) %>%
   filter(vote %in% c(1,2) & gender %in% c(1,2)) %>%
@@ -555,7 +557,7 @@ Following the slide, let us say we are interested in the confidence interval for
 
 We have seen how to calculate predicted probability
 ```{r}
-fixdata = data.frame(wage = c(50, 100, 150,200, 250, 300), education = "5. Advanced Degree", race = "1. White")
+fixdata = data.frame(wage = c(50, 100, 150,200, 250, 300), education = "5. Advanced Degree", race = "1. White", gender = "Female")
 # we directly add type = "response"; it outputs predicted probability directly, not log odds
 probability = predict(trump_model, fixdata, type = "response")
 plot(c(50, 100, 150,200, 250, 300), probability, type = "o")
