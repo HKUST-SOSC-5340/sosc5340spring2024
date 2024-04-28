@@ -15,6 +15,7 @@ library(grf)
 n <- 2000
 p <- 10
 X <- matrix(rnorm(n * p), n, p)
+
 X.test <- matrix(0, 101, p)
 X.test[, 1] <- seq(-2, 2, length.out = 101)
 X.test[, 2] <- rnorm(101)
@@ -31,10 +32,11 @@ data <- data.frame(X,W,Y)
 How would you do without GRF
 ```{r}
 m1 <- lm(Y ~ W * X1, data)
+
 m2 <- lm(Y ~ W * X2, data)
 ## add more interactions?
 
-m2 <- lm(Y ~ W * X1 + W*X2, data)
+m3 <- lm(Y ~ W * X1 + W*X2, data)
 ## keep going??
 ```
 
@@ -43,6 +45,7 @@ m2 <- lm(Y ~ W * X1 + W*X2, data)
 
 
 ```{r}
+
 tau.forest <- causal_forest(X, Y, W)
 
 # Estimate treatment effects for the training data using out-of-bag prediction.
@@ -56,7 +59,7 @@ So you know very clearly what you are doing (that which test is *not* used durin
 
 
 X.test never entered into fitting /trainig process
-But we used it to calculate the effect
+We use it to calculate the effect
 ```{r}
 # Estimate treatment effects for the test sample.
 tau.hat <- predict(tau.forest, X.test)
@@ -69,6 +72,17 @@ lines(X.test[, 2], pmax(0, X.test[, 2]), col = 2, lty = 2)
 
 ```
 
+## what if I wnat to know the people's treatment effect, whose X1 falls between 0.1 and 0.2?
+
+```{r}
+data$effect <- tau.hat.oob[,1]
+rs <- data[data$X1<0.2 & data$X1>0.1, ]
+# calculate effect for this restricted sample
+mean(rs$effect)
+
+treat <- data[data$W == 1, ]
+mean(treat$effect)
+```
 
 
 # Estimate the conditional average treatment effect on the full sample (CATE).
